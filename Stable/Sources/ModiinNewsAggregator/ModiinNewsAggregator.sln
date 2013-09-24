@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AggregatorTests", "AggregatorTests\AggregatorTests.csproj", "{D7B51207-9090-4269-96AE-0EB5902CB87C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModiinNewsAggregator", "ModiinNewsAggregator\ModiinNewsAggregator.csproj", "{F18B5D7B-021F-4855-A3DE-C37EDA7FD708}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D7B51207-9090-4269-96AE-0EB5902CB87C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7B51207-9090-4269-96AE-0EB5902CB87C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7B51207-9090-4269-96AE-0EB5902CB87C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7B51207-9090-4269-96AE-0EB5902CB87C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F18B5D7B-021F-4855-A3DE-C37EDA7FD708}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F18B5D7B-021F-4855-A3DE-C37EDA7FD708}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F18B5D7B-021F-4855-A3DE-C37EDA7FD708}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F18B5D7B-021F-4855-A3DE-C37EDA7FD708}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
