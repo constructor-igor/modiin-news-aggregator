@@ -43,28 +43,5 @@ namespace AggregatorTests
             }
             Assert.Pass();
         }
-
-        [Test]
-        public void ParseTemperature_PogodaModiin_28()
-        {                                   
-//            const string xPath = @"/html/body/table/tbody/tr[547]/td[2]";
-
-            string htmlContent = File.ReadAllText(@"..\..\Data\PogodaModdin.html");
-
-            var htmlDoc = new HtmlDocument {OptionFixNestedTags = true};
-            htmlDoc.Load(new StringReader(htmlContent));
-
-            HtmlNode currentTemperature = htmlDoc.DocumentNode.SelectSingleNode(@"/html[1]/body[1]/div[1]/div[4]/div[2]/div[1]/strong[1]");
-            Assert.AreEqual("+28&deg;", currentTemperature.InnerText);
-
-//            HtmlNode nodeBody = htmlDoc.DocumentNode.SelectSingleNode(@"/html/body/div/div[4]/div[2]/div[1]/strong");
-//            foreach (HtmlNode node in nodeBody.ChildNodes)
-//            {
-//                Trace.WriteLine(String.Format("**** node name: {0}", node.Name));
-//                Trace.WriteLine(String.Format("**** node Inner Text: {0}, Html: {1}, XPath: {2}", node.InnerText, node.InnerHtml, node.XPath));
-//            }
-//            HtmlNode node = doc.DocumentNode.SelectSingleNode(xPath);
-//            Assert.AreEqual("28", node.OuterHtml);
-        }
     }
 }
