@@ -5,7 +5,7 @@ using HtmlAgilityPack;
 using NUnit.Framework;
 using WatiN.Core;
 
-namespace AggregatorTests
+namespace AggregatorTests.Feasibility
 {
     [TestFixture]
     public class FeasibilityTests
@@ -29,7 +29,7 @@ namespace AggregatorTests
         // http://msdn.microsoft.com/en-us/library/system.net.webclient.aspx
         public void LoadHtmlWebClient_PogodaModiin_Loaded()
         {
-            const string uri = "http://pogoda.co.il/israel/modiin";            
+            const string uri = "http://pogoda.co.il/israel/modiin";
             var client = new WebClient();
             client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
             using (Stream data = client.OpenRead(uri))
