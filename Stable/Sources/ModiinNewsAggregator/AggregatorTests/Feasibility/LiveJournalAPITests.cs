@@ -7,8 +7,9 @@ using NUnit.Framework;
 
 namespace AggregatorTests.Feasibility
 {
-    [TestFixture]
     // http://jenyay.net/Programming/LJServer
+    [TestFixture]
+    [Explicit]
     public class LiveJournalAPITests
     {
         [Test]
@@ -38,7 +39,7 @@ namespace AggregatorTests.Feasibility
         public void FlatLJServer_GetTodayPosts_NotNull()
         {
             var flatLjServer = new FlatLJServer();
-            flatLjServer.LoginChallenge("", "");
+            flatLjServer.LoginClearMD5("constructor", "july15");
             flatLjServer.GetPosts();
             Assert.Pass();
         }
@@ -51,6 +52,8 @@ namespace AggregatorTests.Feasibility
     }
     abstract public class LJServer: ILJServer
     {
+        protected string user;
+        protected string hd5;
         protected IWebProxy proxy { get; set; }
         public string ServerUri { get; private set; }
         protected string ContentType { get; set; }
@@ -114,6 +117,7 @@ namespace AggregatorTests.Feasibility
 
         public void LoginClear(string user, string password)
         {
+            this.user = user;
             string request = string.Format("mode=login&auth_method=clear&user={0}&password={1}", user, password);
 
             SendRequest(request);
@@ -121,12 +125,15 @@ namespace AggregatorTests.Feasibility
 
         public void LoginClearMD5(string user, string password)
         {
-            string request = string.Format("mode=login&auth_method=clear&user={0}&hpassword={1}", user, ComputeMD5(password));
+            this.user = user;
+            this.hd5 = ComputeMD5(password);
+            string request = string.Format("mode=login&auth_method=clear&user={0}&hpassword={1}", user, hd5);
             SendRequest(request);
         }
 
         public void LoginChallenge(string user, string password)
         {
+            this.user = user;
             string challenge = SendRequest("mode=getchallenge");
             string auth_response = GetAuthResponse(password, challenge);
             string request = string.Format ("mode=login&auth_method=challenge&auth_challenge={0}&auth_response={1}&user={2}", challenge, auth_response, user);
@@ -166,11 +173,10 @@ namespace AggregatorTests.Feasibility
 
         public void GetPosts()
         {
-            const string user = "";
             const string challenge = "";
             const string auth_response = "";
-            string request = string.Format("mode={0}&user={1}&auth_method={2}&auth_challenge={3}&auth_response={4}&ver={5}&usejournal={6}",
-                "getdaycount", user, "challenge", challenge, auth_response, "1", "modiin_ru");
+            string request = string.Format("mode={0}&user={1}&auth_method={2}&hpassword={3}&ver={3}&usejournal={5}",
+                "getdaycounts", user, "clear", hd5, "1", "modiin_ru");
 
             string posts = SendRequest(request);
         }
@@ -181,6 +187,54 @@ namespace AggregatorTests.Feasibility
         public XmlLJServer()
             : base(@"http://www.livejournal.com/interface/xmlrpc", @"text/xml")
         {
+        }
+    }
+
+    // http://modiin-ru.livejournal.com/data/rss
+    [TestFixture]
+    [Explicit]
+    public class LiveJournal_RSS
+    {
+        [Test]
+        public void Test()
+        {
+            const string uri = "http://modiin-ru.livejournal.com/data/rss";
+            var client = new WebClient();
+            client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
+            using (Stream data = client.OpenRead(uri))
+            {
+                using (var reader = new StreamReader(data))
+                {
+                    string s = reader.ReadToEnd();
+                    //File.WriteAllText(@"d:\test.html", s, new UnicodeEncoding());
+                    Console.WriteLine(s);
+                }
+            }
+            Assert.Pass();
+        }
+    }
+
+    // http://modiin-ru.livejournal.com/data/atom
+    [TestFixture]
+    [Explicit]
+    public class LiveJournal_Atom
+    {
+        [Test]
+        public void Test()
+        {
+            const string uri = "http://modiin-ru.livejournal.com/data/atom";
+            var client = new WebClient();
+            client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
+            using (Stream data = client.OpenRead(uri))
+            {
+                using (var reader = new StreamReader(data))
+                {
+                    string s = reader.ReadToEnd();
+                    //File.WriteAllText(@"d:\test.html", s, new UnicodeEncoding());
+                    Console.WriteLine(s);
+                }
+            }
+            Assert.Pass();
         }
     }
 }
