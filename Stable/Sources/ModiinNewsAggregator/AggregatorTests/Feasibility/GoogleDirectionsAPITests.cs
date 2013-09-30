@@ -86,12 +86,10 @@ namespace AggregatorTests.Feasibility
         public string Duration { get; set; }
         public string Description { get; set; }
     }
-
     public class DirectionSteps
     {
         public string TotalDistance { get; set; }
         public string TotalDuration { get; set; }
         public List<DirectionStep> Steps { get; set; }
     }
-
 }
