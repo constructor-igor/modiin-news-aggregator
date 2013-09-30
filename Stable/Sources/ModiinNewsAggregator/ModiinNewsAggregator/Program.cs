@@ -26,7 +26,7 @@ namespace ModiinNewsAggregator
                         sender.Send(message);
                         break;
                     case "weather":
-                        IProducer modiinWeather = new PogodaModiinProducer();
+                        IProducer modiinWeather = new LogDecoratorProducer(new PogodaModiinProducer());
                         Console.WriteLine(modiinWeather.GetContent());
                         break;
                     case "start":
@@ -37,7 +37,7 @@ namespace ModiinNewsAggregator
                         {
                             try
                             {
-                                IProducer takeCurrentWeather = new PogodaModiinProducer();
+                                IProducer takeCurrentWeather = new LogDecoratorProducer(new PogodaModiinProducer());
                                 ISender twitterSender = new TwitterSender();
                                 twitterSender.Send(takeCurrentWeather.GetContent());
                             }
