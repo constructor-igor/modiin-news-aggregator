@@ -19,6 +19,7 @@ namespace AggregatorTests.Feasibility
             flatLjServer.LoginClear("", "");
             Assert.Pass();
         }
+
         [Test]
         public void FlatLJServer_ClearMD5Authorization_NotNull()
         {
@@ -39,7 +40,7 @@ namespace AggregatorTests.Feasibility
         public void FlatLJServer_GetTodayPosts_NotNull()
         {
             var flatLjServer = new FlatLJServer();
-            flatLjServer.LoginClearMD5("constructor", "july15");
+            flatLjServer.LoginClearMD5("", "");
             flatLjServer.GetPosts();
             Assert.Pass();
         }
