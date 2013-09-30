@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using NUnit.Framework;
 
@@ -13,7 +15,13 @@ namespace AggregatorTests.Feasibility
         public void FlatLJServer_ClearAuthorization_NotNull()
         {
             FlatLJServer flatLjServer = new FlatLJServer();
-            flatLjServer.LoginClear("constructor", "");
+            flatLjServer.LoginClear("", "");
+        }
+        [Test]
+        public void FlatLJServer_ClearMD5Authorization_NotNull()
+        {
+            FlatLJServer flatLjServer = new FlatLJServer();
+            flatLjServer.LoginClearMD5("", "");
         }
     }
 
@@ -89,6 +97,25 @@ namespace AggregatorTests.Feasibility
             string request = string.Format("mode=login&auth_method=clear&user={0}&password={1}", user, password);
 
             SendRequest(request);
+        }
+        public void LoginClearMD5(string user, string password)
+        {
+            string request = string.Format("mode=login&auth_method=clear&user={0}&hpassword={1}",
+                    user, ComputeMD5(password));
+            SendRequest(request);
+        }
+
+        protected string ComputeMD5(string text)
+        {
+            var md5 = new MD5CryptoServiceProvider();
+            byte[] hashBytes = md5.ComputeHash(Encoding.UTF8.GetBytes(text));
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (byte hashByte in hashBytes)
+                sb.Append(Convert.ToString(hashByte, 16).PadLeft(2, '0'));
+
+            return sb.ToString();
         }
     }
 
