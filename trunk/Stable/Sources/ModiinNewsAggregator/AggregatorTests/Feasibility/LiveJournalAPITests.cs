@@ -13,7 +13,7 @@ namespace AggregatorTests.Feasibility
         public void FlatLJServer_ClearAuthorization_NotNull()
         {
             FlatLJServer flatLjServer = new FlatLJServer();
-            flatLjServer.LoginClear("constructor", "july15");
+            flatLjServer.LoginClear("constructor", "");
         }
     }
 
