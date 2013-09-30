@@ -1,4 +1,4 @@
-﻿namespace ModiinNewsAggregator
+﻿namespace ModiinNewsAggregator.Interfaces
 {
     public interface ISender
     {

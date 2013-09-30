@@ -1,6 +1,7 @@
-﻿using NLog;
+﻿using ModiinNewsAggregator.Interfaces;
+using NLog;
 
-namespace ModiinNewsAggregator
+namespace ModiinNewsAggregator.Producers
 {
     public class LogDecoratorProducer : IProducer
     {
@@ -13,10 +14,10 @@ namespace ModiinNewsAggregator
             this.actualProducer = actualProducer;
         }
         #region IProducer
-        public string GetContent()
+        public IMessage GetMessage()
         {
-            string actualContent = actualProducer.GetContent();
-            m_logger.Trace("IProducer.GetContent(): {0}", actualContent);
+            IMessage actualContent = actualProducer.GetMessage();
+            m_logger.Trace("IProducer.GetMessage(): {0}", actualContent);
             return actualContent;
         }
         #endregion
