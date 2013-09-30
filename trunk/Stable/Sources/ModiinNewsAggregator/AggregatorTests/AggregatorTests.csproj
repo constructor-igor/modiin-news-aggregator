@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="Feasibility\FeasibilityTests.cs" />
     <Compile Include="Feasibility\GoogleDirectionsAPITests.cs" />
+    <Compile Include="Feasibility\LiveJournalAPITests.cs" />
     <Compile Include="PogodaModiinParsingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
