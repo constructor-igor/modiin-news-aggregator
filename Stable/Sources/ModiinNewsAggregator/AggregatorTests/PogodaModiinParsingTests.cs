@@ -56,7 +56,7 @@ namespace AggregatorTests
     }
 
     [TestFixture]
-    public class LiveJournalAtomTests
+    public class LiveJournalSyndicationTests
     {
         [Test]
         public void ParseLiveJournalAtom()
