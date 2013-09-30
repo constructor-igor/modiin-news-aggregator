@@ -14,14 +14,24 @@ namespace AggregatorTests.Feasibility
         [Test]
         public void FlatLJServer_ClearAuthorization_NotNull()
         {
-            FlatLJServer flatLjServer = new FlatLJServer();
+            var flatLjServer = new FlatLJServer();
             flatLjServer.LoginClear("", "");
+            Assert.Pass();
         }
         [Test]
         public void FlatLJServer_ClearMD5Authorization_NotNull()
         {
-            FlatLJServer flatLjServer = new FlatLJServer();
+            var flatLjServer = new FlatLJServer();
             flatLjServer.LoginClearMD5("", "");
+            Assert.Pass();
+        }
+
+        [Test]
+        public void FlatLJServer_ChallengeAuthorization_NotNull()
+        {
+            var flatLjServer = new FlatLJServer();
+            flatLjServer.LoginChallenge("", "");
+            Assert.Pass();
         }
     }
 
@@ -98,11 +108,19 @@ namespace AggregatorTests.Feasibility
 
             SendRequest(request);
         }
+
         public void LoginClearMD5(string user, string password)
         {
-            string request = string.Format("mode=login&auth_method=clear&user={0}&hpassword={1}",
-                    user, ComputeMD5(password));
+            string request = string.Format("mode=login&auth_method=clear&user={0}&hpassword={1}", user, ComputeMD5(password));
             SendRequest(request);
+        }
+
+        public void LoginChallenge(string user, string password)
+        {
+            string challenge = SendRequest("mode=getchallenge");
+            string auth_response = GetAuthResponse(password, challenge);
+            string request = string.Format ("mode=login&auth_method=challenge&auth_challenge={0}&auth_response={1}&user={2}", challenge, auth_response, user);
+            SendRequest (request);
         }
 
         protected string ComputeMD5(string text)
@@ -110,12 +128,22 @@ namespace AggregatorTests.Feasibility
             var md5 = new MD5CryptoServiceProvider();
             byte[] hashBytes = md5.ComputeHash(Encoding.UTF8.GetBytes(text));
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             foreach (byte hashByte in hashBytes)
                 sb.Append(Convert.ToString(hashByte, 16).PadLeft(2, '0'));
 
             return sb.ToString();
+        }
+        protected string GetAuthResponse(string password, string challenge)
+        {
+            // md5 от пароля
+            string hpass = ComputeMD5(password);
+
+            string constr = challenge + hpass;
+            string auth_response = ComputeMD5(constr);
+
+            return auth_response;
         }
     }
 
