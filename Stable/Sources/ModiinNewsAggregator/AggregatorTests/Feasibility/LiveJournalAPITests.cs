@@ -33,6 +33,16 @@ namespace AggregatorTests.Feasibility
             flatLjServer.LoginChallenge("", "");
             Assert.Pass();
         }
+
+        [Test]
+        public void FlatLJServer_GetTodayPosts_NotNull()
+        {
+            var flatLjServer = new FlatLJServer();
+            flatLjServer.LoginChallenge("", "");
+            flatLjServer.GetPosts();
+            Assert.Pass();
+        }
+
     }
 
     public interface ILJServer
@@ -152,6 +162,17 @@ namespace AggregatorTests.Feasibility
         public FlatLJServer()
             : base(@"http://www.livejournal.com/interface/flat", @"application/x-www-form-urlencoded")
         {
+        }
+
+        public void GetPosts()
+        {
+            const string user = "";
+            const string challenge = "";
+            const string auth_response = "";
+            string request = string.Format("mode={0}&user={1}&auth_method={2}&auth_challenge={3}&auth_response={4}&usejournal={5}",
+                "getdaycount", user, "challenge", challenge, auth_response, "modiin_ru");
+
+            string posts = SendRequest(request);
         }
     }
 
