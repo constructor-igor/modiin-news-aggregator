@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
+using ModiinNewsAggregator.Interfaces;
 using Twitterizer;
 
-namespace ModiinNewsAggregator
+namespace ModiinNewsAggregator.Senders
 {
     public class TwitterErrorException : Exception
     {

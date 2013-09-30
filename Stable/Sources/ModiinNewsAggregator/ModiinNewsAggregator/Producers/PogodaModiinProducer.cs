@@ -1,14 +1,15 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using HtmlAgilityPack;
-using System;
+using ModiinNewsAggregator.Interfaces;
 
-namespace ModiinNewsAggregator
+namespace ModiinNewsAggregator.Producers
 {
     public class PogodaModiinProducer : IProducer
     {
         #region IProducer
-        public string GetContent()
+        public IMessage GetMessage()
         {
             string htmlContent = GetPogodaModiinPage();
 
@@ -22,10 +23,10 @@ namespace ModiinNewsAggregator
             HtmlNode dataUpdated = htmlDoc.DocumentNode.SelectSingleNode(@"/html/body/div/div[4]/div[2]/div[1]/p[2]/b[1]");
             string dataUpdatedText = dataUpdated.InnerText;
 
-            return String.Format("#Modiin - now {0}\u00B0C. Source: http://pogoda.co.il/israel/modiin, updated {1}", contentStrings[0], dataUpdatedText);
+            return new MessageContainer(String.Format("#Modiin - now {0}\u00B0C. Source: http://pogoda.co.il/israel/modiin, updated {1}", contentStrings[0], dataUpdatedText));
         }
         #endregion
-        private string GetPogodaModiinPage()
+        string GetPogodaModiinPage()
         {
             const string uri = "http://pogoda.co.il/israel/modiin";
             var client = new WebClient();
