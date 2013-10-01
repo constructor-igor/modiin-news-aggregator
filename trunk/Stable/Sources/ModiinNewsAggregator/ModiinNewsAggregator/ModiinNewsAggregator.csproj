@@ -64,7 +64,8 @@
     <Compile Include="Interfaces\IMessage.cs" />
     <Compile Include="Interfaces\IProducer.cs" />
     <Compile Include="Interfaces\ISender.cs" />
-    <Compile Include="Producers\LiveJournalUpdatesProducer.cs" />
+    <Compile Include="Producers\LiveJournalProducer.cs" />
+    <Compile Include="Producers\UpdatesProducer.cs" />
     <Compile Include="Producers\LogDecoratorProducer.cs" />
     <Compile Include="MessageContainer.cs" />
     <Compile Include="Producers\PogodaModiinProducer.cs" />

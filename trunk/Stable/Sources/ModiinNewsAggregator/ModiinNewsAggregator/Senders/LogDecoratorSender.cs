@@ -1,12 +1,11 @@
-﻿using System.Text;
-using ModiinNewsAggregator.Interfaces;
+﻿using ModiinNewsAggregator.Interfaces;
 using NLog;
 
 namespace ModiinNewsAggregator.Senders
 {
     public class LogDecoratorSender : ISender
     {
-        private static readonly Logger m_logger = LogManager.GetCurrentClassLogger();
+        static readonly Logger m_logger = LogManager.GetCurrentClassLogger();
         readonly ISender actualSender;
         public LogDecoratorSender(ISender actualSender)
         {
