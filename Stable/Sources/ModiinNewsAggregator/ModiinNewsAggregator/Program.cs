@@ -78,9 +78,8 @@ namespace ModiinNewsAggregator
             {
                 try
                 {
-                    IProducer takeLiveJournalUpdate = new LogDecoratorProducer(new LiveJournalUpdatesProducer());
-                    //ISender twitterSender = new TwitterSender();
-                    ISender sender = new LogDecoratorSender(new EmptySender());
+                    IProducer takeLiveJournalUpdate = new LogDecoratorProducer(new LiveJournalProducer());
+                    ISender sender = new LogDecoratorSender(new TwitterSender());
                     sender.Send(takeLiveJournalUpdate.GetMessage().Text);
                 }
                 catch (TwitterErrorException e)

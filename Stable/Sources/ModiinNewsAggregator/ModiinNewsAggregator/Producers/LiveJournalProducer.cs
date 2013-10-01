@@ -12,13 +12,16 @@ namespace ModiinNewsAggregator.Producers
 {
     //http://potrebitel-il.livejournal.com/data/atom
     //http://modiin-ru.livejournal.com/data/atom"
-    public class LiveJournalUpdatesProducer : IProducer
+    //http://nitsanim.livejournal.com/
+
+    public class LiveJournalProducer : IProducer
     {
         readonly List<string> uriList = new List<string>();
-        public LiveJournalUpdatesProducer()
+        public LiveJournalProducer()
         {
-            uriList.Add(@"http://potrebitel-il.livejournal.com/data/atom");
-            //uriList.Add(@"http://modiin-ru.livejournal.com/data/atom");
+            //uriList.Add(@"http://potrebitel-il.livejournal.com/data/atom");
+            uriList.Add(@"http://modiin-ru.livejournal.com/data/atom");
+            uriList.Add(@"http://nitsanim.livejournal.com/");
         }
         #region IProducer
         public IMessage GetMessage()
@@ -27,7 +30,7 @@ namespace ModiinNewsAggregator.Producers
             return message;
         }
 
-        private static IMessage GetMessage(string uri)
+        static IMessage GetMessage(string uri)
         {
             var client = new WebClient();
             using (Stream atomStream = client.OpenRead(uri))
@@ -44,7 +47,8 @@ namespace ModiinNewsAggregator.Producers
                     string postUri = lastPost.Links[0].Uri.AbsoluteUri;
                     string postTitle = lastPost.Title.Text;
                     DateTimeOffset postTime = lastPost.PublishDate;
-                    string lastPostMessage = String.Format("Post '{0}' published {1}. Source: {2}", postTitle, postTime, postUri);
+                    //string lastPostMessage = String.Format("Post '{0}' published {1}. Source: {2}", postTitle, postTime.LocalDateTime, postUri);
+                    string lastPostMessage = String.Format("Новый пост от modiin_ru (LJ) '{0}'. Источник: {1}", postTitle, postUri);
 
                     return new MessageContainer(lastPostMessage);
                 }
