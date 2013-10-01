@@ -5,7 +5,7 @@ namespace ModiinNewsAggregator.Senders
     public class EmptySender : ISender
     {
         #region ISender
-        public void Send(string message)
+        public void Send(IMessage message)
         {
         }
         #endregion

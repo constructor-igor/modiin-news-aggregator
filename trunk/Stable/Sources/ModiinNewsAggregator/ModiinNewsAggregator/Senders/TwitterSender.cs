@@ -35,7 +35,7 @@ namespace ModiinNewsAggregator.Senders
             m_AccessTokenSecret = customConfig.AppSettings.Settings["AccessTokenSecret"].Value;
         }
         #region ISender
-        public void Send(string message)
+        public void Send(IMessage message)
         {
             var tokens = new OAuthTokens
             {
@@ -45,7 +45,7 @@ namespace ModiinNewsAggregator.Senders
                 AccessTokenSecret = m_AccessTokenSecret
             };
 
-            TwitterResponse<TwitterStatus> tweetResponse = TwitterStatus.Update(tokens, message);
+            TwitterResponse<TwitterStatus> tweetResponse = TwitterStatus.Update(tokens, message.Text);
 
             if (tweetResponse.Result != RequestResult.Success)
             {

@@ -71,6 +71,7 @@
     <Compile Include="Producers\PogodaModiinProducer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Senders\EmptyFilterSender.cs" />
     <Compile Include="Senders\EmptySender.cs" />
     <Compile Include="Senders\LogDecoratorSender.cs" />
     <Compile Include="Senders\TwitterSender.cs" />

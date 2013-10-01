@@ -26,7 +26,7 @@ namespace ModiinNewsAggregator
                     case "twit":
                         ISender sender = new TwitterSender();
                         string message = input.Remove(0, command.Length);
-                        sender.Send(message);
+                        sender.Send(new MessageContainer(message));
                         break;
                     case "weather":
                         IProducer modiinWeather = new LogDecoratorProducer(new PogodaModiinProducer());
@@ -59,7 +59,7 @@ namespace ModiinNewsAggregator
                 {
                     IProducer takeCurrentWeather = new LogDecoratorProducer(new PogodaModiinProducer());
                     ISender twitterSender = new TwitterSender();
-                    twitterSender.Send(takeCurrentWeather.GetMessage().Text);
+                    twitterSender.Send(takeCurrentWeather.GetMessage());
                 }
                 catch (TwitterErrorException e)
                 {
@@ -79,8 +79,8 @@ namespace ModiinNewsAggregator
                 try
                 {
                     IProducer takeLiveJournalUpdate = new LogDecoratorProducer(new UpdatesProducer(new LiveJournalProducer()));
-                    ISender sender = new LogDecoratorSender(new TwitterSender());
-                    sender.Send(takeLiveJournalUpdate.GetMessage().Text);
+                    ISender sender = new EmptyFilterSender(new LogDecoratorSender(new TwitterSender()));
+                    sender.Send(takeLiveJournalUpdate.GetMessage());
                 }
                 catch (TwitterErrorException e)
                 {

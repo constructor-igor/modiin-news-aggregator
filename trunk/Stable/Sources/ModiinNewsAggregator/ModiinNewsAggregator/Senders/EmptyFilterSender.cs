@@ -1,21 +1,19 @@
 ﻿using ModiinNewsAggregator.Interfaces;
-using NLog;
 
 namespace ModiinNewsAggregator.Senders
 {
-    public class LogDecoratorSender : ISender
+    public class EmptyFilterSender : ISender
     {
-        static readonly Logger m_logger = LogManager.GetCurrentClassLogger();
         readonly ISender actualSender;
-        public LogDecoratorSender(ISender actualSender)
+        public EmptyFilterSender(ISender actualSender)
         {
             this.actualSender = actualSender;
         }
         #region ISender
         public void Send(IMessage message)
         {
-            m_logger.Trace("ISender.Send(): {0}", message.Text);
-            actualSender.Send(message);
+            if (!message.Empty)
+                actualSender.Send(message);
         }
         #endregion
     }
