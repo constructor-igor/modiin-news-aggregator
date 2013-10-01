@@ -78,7 +78,7 @@ namespace ModiinNewsAggregator
             {
                 try
                 {
-                    IProducer takeLiveJournalUpdate = new LogDecoratorProducer(new LiveJournalProducer());
+                    IProducer takeLiveJournalUpdate = new LogDecoratorProducer(new UpdatesProducer(new LiveJournalProducer()));
                     ISender sender = new LogDecoratorSender(new TwitterSender());
                     sender.Send(takeLiveJournalUpdate.GetMessage().Text);
                 }
