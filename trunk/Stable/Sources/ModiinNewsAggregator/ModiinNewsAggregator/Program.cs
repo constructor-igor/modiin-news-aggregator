@@ -74,19 +74,20 @@ namespace ModiinNewsAggregator
             const int MIN1 = 60 * SEC1;
             const int HOUR1 = 60 * MIN1;
             const int PERIOD = MIN1;
+            IProducer takeLiveJournalUpdate = new LogDecoratorProducer(new UpdatesProducer(new LiveJournalProducer()));
             var timer = new Timer(state =>
             {
                 try
                 {
-                    IProducer takeLiveJournalUpdate = new LogDecoratorProducer(new UpdatesProducer(new LiveJournalProducer()));
+                    IProducer producer = (IProducer) state;
                     ISender sender = new EmptyFilterSender(new LogDecoratorSender(new TwitterSender()));
-                    sender.Send(takeLiveJournalUpdate.GetMessage());
+                    sender.Send(producer.GetMessage());
                 }
                 catch (TwitterErrorException e)
                 {
                     Console.WriteLine("Twit not sent, because {0}", e.Status.Content);
                 }
-            }, null, 0, PERIOD);
+            }, takeLiveJournalUpdate, 0, PERIOD);
             return timer;
         }
     }
