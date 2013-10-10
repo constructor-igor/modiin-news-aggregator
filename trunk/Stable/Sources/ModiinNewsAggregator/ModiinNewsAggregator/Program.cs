@@ -32,6 +32,10 @@ namespace ModiinNewsAggregator
                         IProducer modiinWeather = new LogDecoratorProducer(new PogodaModiinProducer());
                         Console.WriteLine(modiinWeather.GetMessage());
                         break;
+                    case "instagram":
+                        IProducer instagramMedia = new InstagramProducer();
+                        Console.WriteLine(instagramMedia.GetMessage());
+                        break;
                     case "start":
                         Timer pogodaTimer = StartModiinPogodaTimer();
                         Timer liveJournlTimer = StartLiveJournalMonitoringTimer();
@@ -60,6 +64,9 @@ namespace ModiinNewsAggregator
                     IProducer takeCurrentWeather = new LogDecoratorProducer(new PogodaModiinProducer());
                     ISender twitterSender = new TwitterSender();
                     twitterSender.Send(takeCurrentWeather.GetMessage());
+
+                    IProducer instagram = new InstagramProducer();
+                    twitterSender.Send(instagram.GetMessage());
                 }
                 catch (TwitterErrorException e)
                 {
