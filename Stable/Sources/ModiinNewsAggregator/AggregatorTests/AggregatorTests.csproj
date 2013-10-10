@@ -33,6 +33,9 @@
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\packages\HtmlAgilityPack.1.4.6\lib\Net40\HtmlAgilityPack.dll</HintPath>
     </Reference>
+    <Reference Include="InstaSharp">
+      <HintPath>..\..\..\3rdParty\InstaSharp\InstaSharp.dll</HintPath>
+    </Reference>
     <Reference Include="Interop.SHDocVw">
       <HintPath>..\packages\WatiN.2.1.0\lib\net40\Interop.SHDocVw.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -41,6 +44,10 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <Private>True</Private>
       <HintPath>..\packages\WatiN.2.1.0\lib\net40\Microsoft.mshtml.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.0.2.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\3rdParty\InstaSharp\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.0.1.2\lib\net40\NLog.dll</HintPath>
@@ -63,7 +70,9 @@
   <ItemGroup>
     <Compile Include="Feasibility\FeasibilityTests.cs" />
     <Compile Include="Feasibility\GoogleDirectionsAPITests.cs" />
+    <Compile Include="Feasibility\InstagramAPITests.cs" />
     <Compile Include="Feasibility\LiveJournalAPITests.cs" />
+    <Compile Include="InstagramJsonParserTests.cs" />
     <Compile Include="LiveJournalSyndicationTests.cs" />
     <Compile Include="PogodaModiinParsingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
