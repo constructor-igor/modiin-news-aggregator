@@ -16,17 +16,19 @@ namespace ModiinNewsAggregator.Producers
 
     public class LiveJournalProducer : IProducer
     {
-        readonly List<string> uriList = new List<string>();
-        public LiveJournalProducer()
+        //readonly List<string> uriList = new List<string>();
+        private readonly string ljAtomLink;
+        public LiveJournalProducer(string ljAtomLink)
         {
+            this.ljAtomLink = ljAtomLink;
             //uriList.Add(@"http://potrebitel-il.livejournal.com/data/atom");
-            uriList.Add(@"http://modiin-ru.livejournal.com/data/atom");
-            uriList.Add(@"http://nitsanim.livejournal.com/");
+            //uriList.Add(@"http://modiin-ru.livejournal.com/data/atom");
+            //uriList.Add(@"http://nitsanim.livejournal.com/data/atom");
         }
         #region IProducer
         public IMessage GetMessage()
         {
-            IMessage message = GetMessage(uriList[0]);
+            IMessage message = GetMessage(ljAtomLink);
             return message;
         }
 
