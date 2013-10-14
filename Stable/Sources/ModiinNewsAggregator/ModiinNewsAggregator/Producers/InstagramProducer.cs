@@ -55,15 +55,15 @@ namespace ModiinNewsAggregator.Producers
 
     public class InstagramMediaDataMessage : IMessage
     {
+        static readonly Random random = new Random();
         public bool Empty { get { return !m_mediaList.Any(); } }
         public string Text { get; private set; }
         readonly IList<InstagramMedia> m_mediaList;
 
         public InstagramMediaDataMessage(IList<InstagramMedia> mediaList)
         {            
-            m_mediaList = mediaList;
-            var r = new Random();
-            int randomMedia = r.Next(0, m_mediaList.Count - 1);
+            m_mediaList = mediaList;            
+            int randomMedia = random.Next(0, m_mediaList.Count - 1);
             InstagramMedia media = m_mediaList[randomMedia];
             Text = String.Format("{0}: {1}", media.Caption, media.Link);
         }
