@@ -44,7 +44,7 @@ namespace ModiinNewsAggregator
                         Console.WriteLine(instagramMedia.GetMessage());
                         break;
                     case "start":
-                        var timerExecuter = new TimerExecuter();
+                        IAggregatorExecuter timerExecuter = new TimerExecuter();
                         timerExecuter.Start();
                         break;
                     case "start2":
