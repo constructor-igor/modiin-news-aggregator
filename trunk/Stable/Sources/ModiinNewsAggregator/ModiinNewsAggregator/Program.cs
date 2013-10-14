@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 using ModiinNewsAggregator.Executers;
 using ModiinNewsAggregator.Interfaces;
 using ModiinNewsAggregator.Producers;
