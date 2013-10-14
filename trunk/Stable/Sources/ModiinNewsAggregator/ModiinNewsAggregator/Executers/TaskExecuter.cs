@@ -44,7 +44,7 @@ namespace ModiinNewsAggregator.Executers
                     Thread.Sleep(minute1);
                 }
             });
-            Task NitsanimLjTask = Task.Factory.StartNew(() =>
+            Task nitsanimLjTask = Task.Factory.StartNew(() =>
             {
                 IProducer takeLiveJournalUpdate = new LogDecoratorProducer(new UpdatesProducer(new LiveJournalProducer(@"http://nitsanim.livejournal.com/data/atom")), includeEmptyMessage: false);
                 while (true)
