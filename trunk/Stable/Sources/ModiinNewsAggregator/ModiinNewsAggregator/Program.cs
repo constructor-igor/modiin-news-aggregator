@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using ModiinNewsAggregator.Interfaces;
 using ModiinNewsAggregator.Producers;
 using ModiinNewsAggregator.Senders;
@@ -49,6 +51,9 @@ namespace ModiinNewsAggregator
 
                         GC.KeepAlive(pogodaTimer);
                         GC.KeepAlive(liveJournlTimer);
+                        break;
+                    case "start2":
+                        Start2();
                         break;
                     default:
                         Console.WriteLine("unknown command: '{0}'", command);
@@ -108,6 +113,50 @@ namespace ModiinNewsAggregator
                 }
             }, takeLiveJournalUpdate, 0, PERIOD);
             return timer;
+        }
+
+        public static void Start2()
+        {
+            var queue = new ConcurrentQueue<IMessage>();
+            Task wheatherProducerTask = Task.Factory.StartNew(() =>
+            {
+                IProducer takeCurrentWeather = new LogDecoratorProducer(new UpdatesProducer(new PogodaModiinProducer()), includeEmptyMessage: false);
+                while (true)
+                {                    
+                    queue.Enqueue(takeCurrentWeather.GetMessage());
+                    Thread.Sleep(new TimeSpan(hours: 1, minutes: 0, seconds: 0));
+                }
+            });
+            Task instagramProducerTask = Task.Factory.StartNew(() =>
+            {
+                IProducer instagramModiin = new LogDecoratorProducer(new UpdatesProducer(new InstagramProducer()), includeEmptyMessage: false);
+                while (true)
+                {                    
+                    queue.Enqueue(instagramModiin.GetMessage());
+                    Thread.Sleep(new TimeSpan(hours: 1, minutes: 0, seconds: 0));
+                }
+            });
+            Task ModiinLjTask = Task.Factory.StartNew(() =>
+            {
+                IProducer takeLiveJournalUpdate = new LogDecoratorProducer(new UpdatesProducer(new LiveJournalProducer()), includeEmptyMessage: false);
+                while (true)
+                {                    
+                    queue.Enqueue(takeLiveJournalUpdate.GetMessage());
+                    Thread.Sleep(new TimeSpan(hours: 0, minutes: 1, seconds: 0));
+                }
+            });
+            Task twitterSenderTask = Task.Factory.StartNew(() =>
+            {
+                ISender sender = new EmptyFilterSender(new LogDecoratorSender(new TwitterSender()));
+                while (true)
+                {                    
+                    IMessage message;
+                    if (queue.TryDequeue(out message))
+                    {                        
+                        sender.Send(message);
+                    }
+                }
+            });
         }
         public static string Version
         {
