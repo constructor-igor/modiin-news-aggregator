@@ -37,11 +37,20 @@ namespace ModiinNewsAggregator.Executers
             });
             Task ModiinLjTask = Task.Factory.StartNew(() =>
             {
-                IProducer takeLiveJournalUpdate = new LogDecoratorProducer(new UpdatesProducer(new LiveJournalProducer()), includeEmptyMessage: false);
+                IProducer takeLiveJournalUpdate = new LogDecoratorProducer(new UpdatesProducer(new LiveJournalProducer(@"http://modiin-ru.livejournal.com/data/atom")), includeEmptyMessage: false);
                 while (true)
                 {
                     queue.Enqueue(takeLiveJournalUpdate.GetMessage());                    
                     Thread.Sleep(minute1);
+                }
+            });
+            Task NitsanimLjTask = Task.Factory.StartNew(() =>
+            {
+                IProducer takeLiveJournalUpdate = new LogDecoratorProducer(new UpdatesProducer(new LiveJournalProducer(@"http://nitsanim.livejournal.com/data/atom")), includeEmptyMessage: false);
+                while (true)
+                {
+                    queue.Enqueue(takeLiveJournalUpdate.GetMessage());
+                    Thread.Sleep(hour1);
                 }
             });
             Task twitterSenderTask = Task.Factory.StartNew(() =>

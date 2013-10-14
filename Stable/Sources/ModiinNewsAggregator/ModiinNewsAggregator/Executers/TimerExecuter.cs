@@ -53,7 +53,7 @@ namespace ModiinNewsAggregator.Executers
             const int MIN1 = 60 * SEC1;
             const int HOUR1 = 60 * MIN1;
             const int PERIOD = MIN1;
-            IProducer takeLiveJournalUpdate = new LogDecoratorProducer(new UpdatesProducer(new LiveJournalProducer()), includeEmptyMessage: false);
+            IProducer takeLiveJournalUpdate = new LogDecoratorProducer(new UpdatesProducer(new LiveJournalProducer(@"http://modiin-ru.livejournal.com/data/atom")), includeEmptyMessage: false);
             var timer = new Timer(state =>
             {
                 IMessage message = new MessageContainer();
