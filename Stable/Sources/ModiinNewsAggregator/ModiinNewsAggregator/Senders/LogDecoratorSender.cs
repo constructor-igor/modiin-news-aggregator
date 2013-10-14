@@ -1,4 +1,5 @@
-﻿using ModiinNewsAggregator.Interfaces;
+﻿using System;
+using ModiinNewsAggregator.Interfaces;
 using NLog;
 
 namespace ModiinNewsAggregator.Senders
@@ -15,7 +16,18 @@ namespace ModiinNewsAggregator.Senders
         public void Send(IMessage message)
         {
             m_logger.Trace("ISender.Send(): {0}", message.Text);
-            actualSender.Send(message);
+            try
+            {
+                actualSender.Send(message);
+            }
+            catch (TwitterErrorException e)
+            {
+                m_logger.ErrorException(String.Format("sending failed because {0}", e.Status.Content), e);
+            }
+            catch (Exception e)
+            {
+                m_logger.ErrorException(String.Format("sending failed because {0}", e.Message), e);
+            }
         }
         #endregion
     }

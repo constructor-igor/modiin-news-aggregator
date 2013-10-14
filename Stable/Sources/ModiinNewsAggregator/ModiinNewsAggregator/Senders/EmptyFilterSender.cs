@@ -17,4 +17,5 @@ namespace ModiinNewsAggregator.Senders
         }
         #endregion
     }
+    
 }
