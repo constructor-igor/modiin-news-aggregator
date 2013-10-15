@@ -64,11 +64,9 @@ namespace AggregatorTests
                 actualLiveJournalPostAsHtml.AppendLine(String
                         .Format(@"<img alt="""" border=""0"" src=""{0}"" title=""{1}"" />", fileUrl, caption)
                         .Replace(@"\/", @"/"));
-            }
+            }            
 
-            //? how to convert \u0421 to html string
-
-            File.WriteAllText(@"d:\test.txt", actualLiveJournalPostAsHtml.ToString());
+            //File.WriteAllText(@"d:\test.txt", actualLiveJournalPostAsHtml.ToString());
         }
         // <img alt="" border="0" src="http://codeprojecttv.s3.amazonaws.com/thumbnails_production/1/3583/thumb/Jquery-100.jpg" title="" />
         // <img alt="" border="0" src="http://distilleryimage11.s3.amazonaws.com/1cb4f7e030af11e3a77d22000a9f4ddd_8.jpg" title="" />
