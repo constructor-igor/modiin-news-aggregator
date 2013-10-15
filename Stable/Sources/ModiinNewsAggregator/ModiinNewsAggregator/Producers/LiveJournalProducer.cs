@@ -50,11 +50,21 @@ namespace ModiinNewsAggregator.Producers
                     string postTitle = lastPost.Title.Text;
                     DateTimeOffset postTime = lastPost.PublishDate;
                     //string lastPostMessage = String.Format("Post '{0}' published {1}. Source: {2}", postTitle, postTime.LocalDateTime, postUri);
-                    string lastPostMessage = String.Format("Новый пост от modiin_ru (LJ) '{0}'. Источник: {1}", postTitle, postUri);
+
+                    string lastPostMessage = String.Format("Новый пост от {0} (LJ) '{1}'. Источник: {2}", GetUserName(uri), postTitle, postUri);
+
+                    //? how to parse uri
 
                     return new MessageContainer(lastPostMessage);
                 }
             }
+        }
+
+        static string GetUserName(string path)
+        {
+            var uri = new Uri(path);
+            string liveJournalUser = uri.Host.Split('.')[0];
+            return liveJournalUser;
         }
 
         #endregion
