@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using ModiinNewsAggregator.Executers;
 using ModiinNewsAggregator.Interfaces;
@@ -42,6 +43,14 @@ namespace ModiinNewsAggregator
                     case "instagram":
                         IProducer instagramMedia = new InstagramProducer();
                         Console.WriteLine(instagramMedia.GetMessage());
+                        break;
+                    case "instagramToLJ":
+                        if (words.Length > 1)
+                        {
+                            string fileName = words[1];
+                            IProducer producer = new InstagramLiveJournalPageProducer(new InstagramProducer());
+                            File.WriteAllText(fileName, producer.GetMessage().Text);
+                        }
                         break;
                     case "start":
                         IAggregatorExecuter timerExecuter = new TimerExecuter();

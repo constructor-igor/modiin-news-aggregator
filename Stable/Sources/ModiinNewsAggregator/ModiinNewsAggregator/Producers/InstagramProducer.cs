@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using InstaSharp;
@@ -43,8 +44,22 @@ namespace ModiinNewsAggregator.Producers
                 string filter = data.filter;
                 string link = data.link;
                 string caption = data.caption.text;
+                string author = data.caption.from.username;
                 string fileUrl = data.images.standard_resolution.url;
-                var mediaData = new InstagramMedia { Caption = caption, Link = link, Filter = filter, FileUrl = fileUrl };
+
+                string location_latitude = null;
+                string location_longitude = null;
+                try
+                {
+                    location_latitude = data.location.latitude;
+                    location_longitude = data.location.longitude;
+                }
+                catch
+                {
+                    Trace.WriteLine("location not found for medie {0}", caption);
+                }
+
+                var mediaData = new InstagramMedia { Caption = caption, Author = author, Link = link, Filter = filter, FileUrl = fileUrl, Latitude = location_latitude, Longitude = location_longitude};
                 mediaList.Add(mediaData);
             }
             var message = new InstagramMediaDataMessage(mediaList);
@@ -56,15 +71,15 @@ namespace ModiinNewsAggregator.Producers
     public class InstagramMediaDataMessage : IMessage
     {
         static readonly Random random = new Random();
-        public bool Empty { get { return !m_mediaList.Any(); } }
+        public bool Empty { get { return !MediaList.Any(); } }
         public string Text { get; private set; }
-        readonly IList<InstagramMedia> m_mediaList;
+        public readonly IList<InstagramMedia> MediaList;
 
         public InstagramMediaDataMessage(IList<InstagramMedia> mediaList)
         {            
-            m_mediaList = mediaList;            
-            int randomMedia = random.Next(0, m_mediaList.Count - 1);
-            InstagramMedia media = m_mediaList[randomMedia];
+            MediaList = mediaList;            
+            int randomMedia = random.Next(0, MediaList.Count - 1);
+            InstagramMedia media = MediaList[randomMedia];
             Text = String.Format("{0}: {1}", media.Caption, media.Link);
         }
         public override string ToString()
@@ -76,8 +91,11 @@ namespace ModiinNewsAggregator.Producers
     public class InstagramMedia
     {
         public string Caption { get; set; }
+        public string Author { get; set; }
         public string Link { get; set; }
         public string Filter { get; set; }
-        public string FileUrl { get; set; }
+        public string FileUrl { get; set; }       
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
     }
 }
