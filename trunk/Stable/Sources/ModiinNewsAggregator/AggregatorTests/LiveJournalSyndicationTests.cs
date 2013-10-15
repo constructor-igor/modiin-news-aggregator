@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Text;
@@ -65,6 +66,17 @@ namespace AggregatorTests
                 Assert.AreEqual(635159015320000000, lastItem.PublishDate.Ticks);
                 Assert.AreEqual("27/09/2013 5:58:52 PM +00:00", lastItem.PublishDate.ToString());
             }
+        }
+
+        [Test]
+        public void ParseUri_Name_moddin_ru()
+        {
+            const string path = @"http://modiin-ru.livejournal.com/data/atom";
+            var uri = new Uri(path);
+            string liveJournalUser = uri.Host.Split('.')[0];
+
+            Assert.AreEqual("modiin-ru.livejournal.com", uri.Host);
+            Assert.AreEqual("modiin-ru", liveJournalUser);
         }
     }
 }
