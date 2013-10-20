@@ -56,7 +56,7 @@ namespace ModiinNewsAggregator.Producers
                 }
                 catch
                 {
-                    Trace.WriteLine("location not found for medie {0}", caption);
+                    Trace.WriteLine("location not found for media {0}", caption);
                 }
 
                 var mediaData = new InstagramMedia { Caption = caption, Author = author, Link = link, Filter = filter, FileUrl = fileUrl, Latitude = location_latitude, Longitude = location_longitude};

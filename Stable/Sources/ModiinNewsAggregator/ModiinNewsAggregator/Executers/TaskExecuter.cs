@@ -17,7 +17,7 @@ namespace ModiinNewsAggregator.Executers
             var hour1 = new TimeSpan(hours: 1, minutes: 0, seconds: 0);
 
             var queue = new ConcurrentQueue<IMessage>();
-            Task wheatherProducerTask = Task.Factory.StartNew(() =>
+            Task weatherProducerTask = Task.Factory.StartNew(() =>
             {
                 IProducer takeCurrentWeather = new LogDecoratorProducer(new UpdatesProducer(new PogodaModiinProducer()), includeEmptyMessage: false);
                 while (true)
