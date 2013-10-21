@@ -32,13 +32,17 @@ namespace ModiinNewsAggregator.Producers
                 int routeIndex = 1;
                 while ((routeNode = htmlDoc.DocumentNode.SelectSingleNode(String.Format(routePath, routeIndex++))) != null)
                 {
+                    HtmlNodeCollection routeNameNode = routeNode.SelectNodes("div[1]/div[3]");
                     HtmlNodeCollection standardTrafficNode = routeNode.SelectNodes("div[1]/div[1]/span[2]");
-                    HtmlNodeCollection currentTrafficNode = routeNode.SelectNodes("div[1]/div[2]");
+                    HtmlNodeCollection currentTrafficNode = routeNode.SelectNodes("div[1]/div[2]/span[1]");
+
+                    string inCurrentTraffic = currentTrafficNode[0].InnerText.Remove(0, "In current traffic: ".Length);
 
                     var googleTrafficRoute = new GoogleTrafficRoute
                     {
+                        RouteName = routeNameNode[0].InnerText,
                         StandardTraffic = standardTrafficNode[0].InnerText,
-                        InCurrentTraffic = currentTrafficNode[0].InnerText
+                        InCurrentTraffic = inCurrentTraffic
                     };
                     message.SuggestedTraffic.Add(googleTrafficRoute);
                 }
@@ -58,6 +62,7 @@ namespace ModiinNewsAggregator.Producers
             SuggestedTraffic = new List<GoogleTrafficRoute>();
         }
 
+        //"Route 431: 28 mins (+3), Route 412 and Route 431: 38 mins (+6)";
         public void GenerateText()
         {
             if (SuggestedTraffic.Count == 0)
@@ -69,7 +74,7 @@ namespace ModiinNewsAggregator.Producers
             var text = new StringBuilder();
             foreach (GoogleTrafficRoute googleTrafficRoute in SuggestedTraffic)
             {
-                text.AppendFormat("{0} (Standard: {1}), ", googleTrafficRoute.InCurrentTraffic.Trim(), googleTrafficRoute.StandardTraffic);
+                text.AppendFormat("{0}: {1} ({2}), ", googleTrafficRoute.RouteName, googleTrafficRoute.InCurrentTraffic.Trim(), googleTrafficRoute.StandardTraffic);
             }
 
             text.Remove(text.Length-2, 2);
@@ -79,10 +84,16 @@ namespace ModiinNewsAggregator.Producers
         public bool Empty { get { return String.IsNullOrEmpty(Text); } }
         public string Text { get; private set; }
         #endregion
+
+        public override string ToString()
+        {
+            return Text;
+        }
     }
 
     public class GoogleTrafficRoute
     {
+        public string RouteName { get; set; }
         public string StandardTraffic { get; set; }
         public string InCurrentTraffic { get; set; }
     }

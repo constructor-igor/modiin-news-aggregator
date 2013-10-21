@@ -60,6 +60,10 @@ namespace ModiinNewsAggregator
                         IAggregatorExecuter taskExecuter = new TaskExecuter();
                         taskExecuter.Start();
                         break;
+                    case "traffic":
+                        IAggregatorExecuter trafficExecuter = new TrafficExecuter();
+                        trafficExecuter.Start();
+                        break;
                     default:
                         Console.WriteLine("unknown command: '{0}'", command);
                         break;                        
