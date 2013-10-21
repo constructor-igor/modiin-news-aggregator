@@ -69,10 +69,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Feasibility\GoogleDirectionsAPITests.cs" />
+    <Compile Include="Feasibility\GoogleMapTests.cs" />
     <Compile Include="Feasibility\InstagramAPITests.cs" />
     <Compile Include="Feasibility\LiveJournalAPITests.cs" />
     <Compile Include="Feasibility\WatiNTests.cs" />
     <Compile Include="Feasibility\WebClientTests.cs" />
+    <Compile Include="GoogleTrafficParsingTests.cs" />
     <Compile Include="InstagramJsonParserTests.cs" />
     <Compile Include="LiveJournalSyndicationTests.cs" />
     <Compile Include="PogodaModiinParsingTests.cs" />

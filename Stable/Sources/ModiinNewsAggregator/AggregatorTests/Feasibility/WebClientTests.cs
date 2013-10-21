@@ -14,15 +14,17 @@ namespace AggregatorTests.Feasibility
         public void LoadHtmlWebClient_PogodaModiin_Loaded()
         {
             const string uri = "http://pogoda.co.il/israel/modiin";
-            var client = new WebClient();
-            client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
-            using (Stream data = client.OpenRead(uri))
+            using (var client = new WebClient())
             {
-                using (var reader = new StreamReader(data))
+                client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
+                using (Stream data = client.OpenRead(uri))
                 {
-                    string s = reader.ReadToEnd();
-                    //File.WriteAllText(@"d:\test.html", s, new UnicodeEncoding());
-                    Console.WriteLine(s);
+                    using (var reader = new StreamReader(data))
+                    {
+                        string s = reader.ReadToEnd();
+                        //File.WriteAllText(@"d:\test.html", s, new UnicodeEncoding());
+                        Console.WriteLine(s);
+                    }
                 }
             }
             Assert.Pass();
