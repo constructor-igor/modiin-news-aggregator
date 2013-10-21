@@ -1,6 +1,10 @@
 ﻿using System.Diagnostics;
 using System.IO;
+using System.IO.Pipes;
 using HtmlAgilityPack;
+using ModiinNewsAggregator.Interfaces;
+using ModiinNewsAggregator.Producers;
+using Moq;
 using NUnit.Framework;
 
 namespace AggregatorTests
@@ -33,6 +37,25 @@ namespace AggregatorTests
             Assert.IsNotNull(inCurrentTrafficNode);
             Assert.AreEqual("   In current traffic: 28 mins   ", inCurrentTrafficNode.InnerText);
 
+        }
+    }
+
+    [TestFixture]
+    public class GoogleTrafficProducerTests
+    {
+        [Test]
+        public void GetMessage_2Traffics()
+        {
+            using (Stream htmlStream = File.OpenRead(@"..\..\Data\GoogleTrafficRehovotModiin.html"))
+            {
+                var mock = new Mock<IStreamCreator>();
+                mock.Setup(foo => foo.CreateStream()).Returns(htmlStream);
+               
+                var producer = new GoogleTrafficProducer(mock.Object);
+                var message = producer.GetMessage() as GoogleTrafficMessage;
+                Assert.AreEqual("   In current traffic: 28 mins   ", message.Text);
+                //Assert.AreEqual(2, message.SuggestedTraffic.Count);
+            }
         }
     }
 }
