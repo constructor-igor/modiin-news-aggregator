@@ -83,6 +83,7 @@
   <ItemGroup>
     <Compile Include="Executers\TaskExecuter.cs" />
     <Compile Include="Executers\TimerExecuter.cs" />
+    <Compile Include="Executers\TrafficExecuter.cs" />
     <Compile Include="Interfaces\IAggregatorExecuter.cs" />
     <Compile Include="Interfaces\IMessage.cs" />
     <Compile Include="Interfaces\IProducer.cs" />
