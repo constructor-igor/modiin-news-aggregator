@@ -87,6 +87,8 @@
     <Compile Include="Interfaces\IMessage.cs" />
     <Compile Include="Interfaces\IProducer.cs" />
     <Compile Include="Interfaces\ISender.cs" />
+    <Compile Include="Interfaces\IStreamCreator.cs" />
+    <Compile Include="Producers\GoogleTrafficProducer.cs" />
     <Compile Include="Producers\InstagramLiveJournalPageProducer.cs" />
     <Compile Include="Producers\InstagramProducer.cs" />
     <Compile Include="Producers\LiveJournalProducer.cs" />
@@ -100,6 +102,7 @@
     <Compile Include="Senders\EmptySender.cs" />
     <Compile Include="Senders\LogDecoratorSender.cs" />
     <Compile Include="Senders\TwitterSender.cs" />
+    <Compile Include="UriStreamCreator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
