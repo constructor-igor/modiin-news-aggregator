@@ -105,7 +105,7 @@ namespace AggregatorTests
                 var mock = new Mock<IStreamCreator>();
                 mock.Setup(foo => foo.CreateStream()).Returns(htmlStream);
                
-                var producer = new GoogleTrafficProducer("Town1 - Town2", mock.Object);
+                var producer = new GoogleTrafficProducer("Town1", "Town2", mock.Object);
                 var message = producer.GetMessage() as GoogleTrafficMessage;
                 const string expectedText = "Town1 - Town2 via Route 431: 28 mins (25 mins), Route 412 and Route 431: 38 mins (32 mins)";
                 Assert.AreEqual(expectedText, message.Text);

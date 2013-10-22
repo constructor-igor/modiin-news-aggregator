@@ -9,11 +9,13 @@ namespace ModiinNewsAggregator.Producers
 {
     public class GoogleTrafficProducer : IProducer
     {
-        readonly string directionCaption;
+        readonly string sourceAddress;
+        readonly string destinationAddress;
         readonly IStreamCreator streamCreator;
-        public GoogleTrafficProducer(string directionCaption, IStreamCreator streamCreator)
+        public GoogleTrafficProducer(string sourceAddress, string destinationAddress, IStreamCreator streamCreator)
         {
-            this.directionCaption = directionCaption;
+            this.sourceAddress = sourceAddress;
+            this.destinationAddress = destinationAddress;            
             this.streamCreator = streamCreator;
         }
         #region IProducer
@@ -26,7 +28,7 @@ namespace ModiinNewsAggregator.Producers
                 var htmlDoc = new HtmlDocument {OptionFixNestedTags = true};
                 htmlDoc.Load(stream);
 
-                var message = new GoogleTrafficMessage(directionCaption);
+                var message = new GoogleTrafficMessage(sourceAddress, destinationAddress);
                 HtmlNode routeNode = null;
                 int routeIndex = 1;
                 while ((routeNode = htmlDoc.DocumentNode.SelectSingleNode(String.Format(routePath, routeIndex++))) != null)
@@ -54,12 +56,16 @@ namespace ModiinNewsAggregator.Producers
 
     public class GoogleTrafficMessage : IMessage
     {
-        public string DirectionCaption;
+        public string SourceAddress { get; private set; }
+        public string DestinationAddress { get; private set; }
+        public string DirectionCaption { get; private set; }
         public IList<GoogleTrafficRoute> SuggestedTraffic { get; private set; }
 
-        public GoogleTrafficMessage(string directionCaption)
+        public GoogleTrafficMessage(string sourceAddress, string destinationAddress)
         {
-            DirectionCaption = directionCaption;
+            SourceAddress = sourceAddress;
+            DestinationAddress = destinationAddress;
+            DirectionCaption = String.Format("{0} - {1}", sourceAddress, destinationAddress);
             SuggestedTraffic = new List<GoogleTrafficRoute>();
         }
 
