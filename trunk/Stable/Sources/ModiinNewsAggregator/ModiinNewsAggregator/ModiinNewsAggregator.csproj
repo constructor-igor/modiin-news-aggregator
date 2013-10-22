@@ -89,6 +89,7 @@
     <Compile Include="Interfaces\IProducer.cs" />
     <Compile Include="Interfaces\ISender.cs" />
     <Compile Include="Interfaces\IStreamCreator.cs" />
+    <Compile Include="Producers\GoogleMultiTrafficProducer.cs" />
     <Compile Include="Producers\GoogleTrafficProducer.cs" />
     <Compile Include="Producers\InstagramLiveJournalPageProducer.cs" />
     <Compile Include="Producers\InstagramProducer.cs" />
