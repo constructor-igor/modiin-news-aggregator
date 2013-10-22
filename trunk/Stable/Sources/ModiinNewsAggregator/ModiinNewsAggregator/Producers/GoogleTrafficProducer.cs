@@ -9,25 +9,24 @@ namespace ModiinNewsAggregator.Producers
 {
     public class GoogleTrafficProducer : IProducer
     {
-        private readonly IStreamCreator streamCreator;
-        public GoogleTrafficProducer(IStreamCreator streamCreator)
+        readonly string directionCaption;
+        readonly IStreamCreator streamCreator;
+        public GoogleTrafficProducer(string directionCaption, IStreamCreator streamCreator)
         {
+            this.directionCaption = directionCaption;
             this.streamCreator = streamCreator;
         }
         #region IProducer
         public IMessage GetMessage()
         {
-            //const string xPath = @"/html[1]/body[1]/div[4]/div[6]/div[1]/div[2]/div[3]/div[1]/div[1]/div[1]/div[1]/ol[1]/li[1]/div[1]/div[2]";
             const string routePath = @"/html[1]/body[1]/div[4]/div[6]/div[1]/div[2]/div[3]/div[1]/div[1]/div[1]/div[1]/ol[1]/li[{0}]";
-//            const string currentTrafficPath = @"/html[1]/body[1]/div[4]/div[6]/div[1]/div[2]/div[3]/div[1]/div[1]/div[1]/div[1]/ol[1]/li[{0}]/div[1]/div[2]";
-//            const string standardTrafficPath = @"/html[1]/body[1]/div[4]/div[6]/div[1]/div[2]/div[3]/div[1]/div[1]/div[1]/div[1]/ol[1]/li[{0}]/div[1]/div[1]/span[2]";
 
             using (Stream stream = streamCreator.CreateStream())
             {
                 var htmlDoc = new HtmlDocument {OptionFixNestedTags = true};
                 htmlDoc.Load(stream);
 
-                var message = new GoogleTrafficMessage();
+                var message = new GoogleTrafficMessage(directionCaption);
                 HtmlNode routeNode = null;
                 int routeIndex = 1;
                 while ((routeNode = htmlDoc.DocumentNode.SelectSingleNode(String.Format(routePath, routeIndex++))) != null)
@@ -55,19 +54,20 @@ namespace ModiinNewsAggregator.Producers
 
     public class GoogleTrafficMessage : IMessage
     {
+        public string DirectionCaption;
         public IList<GoogleTrafficRoute> SuggestedTraffic { get; private set; }
 
-        public GoogleTrafficMessage()
+        public GoogleTrafficMessage(string directionCaption)
         {
+            DirectionCaption = directionCaption;
             SuggestedTraffic = new List<GoogleTrafficRoute>();
         }
 
-        //"Route 431: 28 mins (+3), Route 412 and Route 431: 38 mins (+6)";
         public void GenerateText()
         {
+            Text = String.Format("{0} via ", DirectionCaption);
             if (SuggestedTraffic.Count == 0)
             {
-                Text = null;
                 return;
             }
 
@@ -78,7 +78,7 @@ namespace ModiinNewsAggregator.Producers
             }
 
             text.Remove(text.Length-2, 2);
-            Text = text.ToString();
+            Text += text.ToString();
         }
         #region IMessage
         public bool Empty { get { return String.IsNullOrEmpty(Text); } }
