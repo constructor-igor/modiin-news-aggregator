@@ -76,11 +76,16 @@ namespace ModiinNewsAggregator.Producers
         public readonly IList<InstagramMedia> MediaList;
 
         public InstagramMediaDataMessage(IList<InstagramMedia> mediaList)
-        {            
+        {
+            Text = "";
             MediaList = mediaList;            
-            int randomMedia = random.Next(0, MediaList.Count - 1);
-            InstagramMedia media = MediaList[randomMedia];
-            Text = String.Format("{0}: {1}", media.Caption, media.Link);
+            //int randomMedia = random.Next(0, MediaList.Count - 1);
+            //InstagramMedia media = MediaList[randomMedia];
+            if (MediaList.Count > 0)
+            {
+                InstagramMedia media = MediaList[0];
+                Text = String.Format("{0}: {1}", media.Caption, media.Link);
+            }
         }
         public override string ToString()
         {

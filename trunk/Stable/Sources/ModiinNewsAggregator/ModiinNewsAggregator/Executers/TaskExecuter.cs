@@ -14,6 +14,8 @@ namespace ModiinNewsAggregator.Executers
         public void Start()
         {
             var minute1 = new TimeSpan(hours: 0, minutes: 1, seconds: 0);
+            var minutes15 = new TimeSpan(hours: 0, minutes: 15, seconds: 0);
+            var minutes30 = new TimeSpan(hours: 0, minutes: 30, seconds: 0);
             var hour1 = new TimeSpan(hours: 1, minutes: 0, seconds: 0);
 
             var queue = new ConcurrentQueue<IMessage>();
@@ -32,7 +34,7 @@ namespace ModiinNewsAggregator.Executers
                 while (true)
                 {                    
                     queue.Enqueue(instagramModiin.GetMessage());
-                    Thread.Sleep(hour1);
+                    Thread.Sleep(minutes30);
                 }
             });
             Task ModiinLjTask = Task.Factory.StartNew(() =>
@@ -51,6 +53,16 @@ namespace ModiinNewsAggregator.Executers
                 {
                     queue.Enqueue(takeLiveJournalUpdate.GetMessage());
                     Thread.Sleep(hour1);
+                }
+            });
+            Task trafficTask = Task.Factory.StartNew(() =>
+            {
+                IProducer multiTrafficProducer = new GoogleMultiTrafficProducer("Modiin", new[] { "Jerusalem", "Tel-Aviv", "HaMada,Rehovot" });
+                IProducer googleTrafficProducer = new LogDecoratorProducer(new UpdatesProducer(multiTrafficProducer), includeEmptyMessage: false);
+                while (true)
+                {
+                    queue.Enqueue(googleTrafficProducer.GetMessage());
+                    Thread.Sleep(minutes15);
                 }
             });
             Task twitterSenderTask = Task.Factory.StartNew(() =>

@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GoogleAPI.UrlShortener">
+      <HintPath>..\..\..\3rdParty\GoogleAPI.UrlShortener\GoogleAPI.UrlShortener.dll</HintPath>
+    </Reference>
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\packages\HtmlAgilityPack.1.4.6\lib\Net40\HtmlAgilityPack.dll</HintPath>
     </Reference>
@@ -73,6 +76,7 @@
   <ItemGroup>
     <Compile Include="Feasibility\GoogleDirectionsAPITests.cs" />
     <Compile Include="Feasibility\GoogleMapTests.cs" />
+    <Compile Include="Feasibility\GoogleShortenerTests.cs" />
     <Compile Include="Feasibility\InstagramAPITests.cs" />
     <Compile Include="Feasibility\LiveJournalAPITests.cs" />
     <Compile Include="Feasibility\WatiNTests.cs" />
