@@ -32,7 +32,7 @@ namespace ModiinNewsAggregator.Executers
                 IMessage message = new MessageContainer();
                 try
                 {
-                    IProducer takeCurrentWeather = new LogDecoratorProducer(new UpdatesProducer(new PogodaUpDownProducer(new PogodaModiinProducer())), includeEmptyMessage: false);
+                    IProducer takeCurrentWeather = new LogDecoratorProducer(new UpdatesProducer(new UpDownProducer(new PogodaModiinProducer())), includeEmptyMessage: false);
                     ISender masterSender = new EmptyFilterSender(new TwitterSender());
                     message = takeCurrentWeather.GetMessage();
                     masterSender.Send(message);

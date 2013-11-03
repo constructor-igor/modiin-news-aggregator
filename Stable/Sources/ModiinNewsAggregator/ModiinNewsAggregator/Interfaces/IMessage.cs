@@ -5,4 +5,10 @@
         bool Empty { get; }
         string Text { get; }
     }
+
+    public interface IValueMessage
+    {
+        double Value { get; }
+    }
+
 }
