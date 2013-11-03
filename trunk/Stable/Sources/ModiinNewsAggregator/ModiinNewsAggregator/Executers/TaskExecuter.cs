@@ -21,7 +21,7 @@ namespace ModiinNewsAggregator.Executers
             var queue = new ConcurrentQueue<IMessage>();
             Task weatherProducerTask = Task.Factory.StartNew(() =>
             {
-                IProducer takeCurrentWeather = new LogDecoratorProducer(new UpdatesProducer(new PogodaUpDownProducer(new PogodaModiinProducer())), includeEmptyMessage: false);
+                IProducer takeCurrentWeather = new LogDecoratorProducer(new UpdatesProducer(new UpDownProducer(new PogodaModiinProducer())), includeEmptyMessage: false);
                 while (true)
                 {                    
                     queue.Enqueue(takeCurrentWeather.GetMessage());

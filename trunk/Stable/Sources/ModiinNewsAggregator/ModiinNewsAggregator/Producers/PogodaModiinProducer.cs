@@ -42,10 +42,12 @@ namespace ModiinNewsAggregator.Producers
         }
     }
 
-    public class PogodaMessage : IMessage
+    public class PogodaMessage : IMessage, IValueMessage
     {
         public bool Empty { get { return String.IsNullOrEmpty(Text); }}
         public string Text { get; private set; }
+        public double Value { get { return Temperature; } }
+
         public double Temperature { get; private set; }
 
         public PogodaMessage(string temperatureAsString, string updatedDate)
@@ -62,47 +64,7 @@ namespace ModiinNewsAggregator.Producers
         public override string ToString()
         {
             return Text;
-        }
+        }        
     }
-
-    // → ← ↑ ↓
-    public class PogodaUpDownProducer : IProducer
-    {
-        private readonly IProducer actualProducer;
-        private double lastValue = double.NaN;
-        public PogodaUpDownProducer(IProducer actualProducer)
-        {
-            this.actualProducer = actualProducer;
-        }
-        public IMessage GetMessage()
-        {
-            IMessage actualMessage = actualProducer.GetMessage();
-            var pogodaMessage = actualMessage as PogodaMessage;
-            if (pogodaMessage == null)
-                return actualMessage;            
-            if (double.IsNaN(pogodaMessage.Temperature))
-                return actualMessage;
-            if (double.IsNaN(lastValue))
-            {
-                lastValue = pogodaMessage.Temperature;
-            }
-            if (Math.Abs(lastValue - pogodaMessage.Temperature) < 0.001)
-                return actualMessage;
-
-            IMessage updatedMessage = actualMessage;
-            double newValue = pogodaMessage.Temperature;
-            try
-            {             
-                if (lastValue < newValue)
-                    updatedMessage = new MessageContainer("↑ " + actualMessage.Text); 
-                if (lastValue > newValue)
-                    updatedMessage = new MessageContainer("↓ " + actualMessage.Text); 
-            }
-            finally
-            {
-                lastValue = newValue;
-            }
-            return updatedMessage;
-        }
-    }
+    
 }
