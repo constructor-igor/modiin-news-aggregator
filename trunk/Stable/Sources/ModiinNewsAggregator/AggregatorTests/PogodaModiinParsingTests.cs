@@ -1,6 +1,9 @@
 ﻿using System;
 using System.IO;
 using HtmlAgilityPack;
+using ModiinNewsAggregator.Interfaces;
+using ModiinNewsAggregator.Producers;
+using Moq;
 using NUnit.Framework;
 
 namespace AggregatorTests
@@ -63,6 +66,42 @@ namespace AggregatorTests
 
             DateTimeOffset postTime = TimeZoneInfo.ConvertTime(universalTime, TimeZoneInfo.Local);
             Assert.AreEqual("01/10/2013 4:30:00 PM", postTime.DateTime.ToString());
+        }
+    }
+
+    [TestFixture]
+    public class PogodaUpDownProducerTests
+    {
+        [Test]
+        public void TestUp()
+        {
+            var mock = new Mock<IProducer>();
+            PogodaMessage pogodaMessage = new PogodaMessage("+18", "11:50");
+            mock.Setup(foo => foo.GetMessage()).Returns(() => pogodaMessage);
+
+            var producer = new PogodaUpDownProducer(mock.Object);
+            IMessage firstMessage = producer.GetMessage();
+            Assert.AreEqual("#Modiin - now 18°C. Source: http://pogoda.co.il/israel/modiin, updated 11:50", firstMessage.Text);
+
+            pogodaMessage = new PogodaMessage("+19", "12:10");
+            IMessage secondMessage = producer.GetMessage();
+            Assert.AreEqual("↑ #Modiin - now 19°C. Source: http://pogoda.co.il/israel/modiin, updated 12:10", secondMessage.Text);
+        }
+
+        [Test]
+        public void TestDown()
+        {
+            var mock = new Mock<IProducer>();
+            PogodaMessage pogodaMessage = new PogodaMessage("+18", "11:50");
+            mock.Setup(foo => foo.GetMessage()).Returns(() => pogodaMessage);
+
+            var producer = new PogodaUpDownProducer(mock.Object);
+            IMessage firstMessage = producer.GetMessage();
+            Assert.AreEqual("#Modiin - now 18°C. Source: http://pogoda.co.il/israel/modiin, updated 11:50", firstMessage.Text);
+
+            pogodaMessage = new PogodaMessage("+17", "12:10");
+            IMessage secondMessage = producer.GetMessage();
+            Assert.AreEqual("↓ #Modiin - now 17°C. Source: http://pogoda.co.il/israel/modiin, updated 12:10", secondMessage.Text);
         }
     }
 }
