@@ -37,7 +37,7 @@ namespace ModiinNewsAggregator
                         sender.Send(new MessageContainer(message));
                         break;
                     case "weather":
-                        IProducer modiinWeather = new LogDecoratorProducer(new PogodaModiinProducer(), includeEmptyMessage: false);
+                        IProducer modiinWeather = new LogDecoratorProducer(new PogodaUpDownProducer(new PogodaModiinProducer()), includeEmptyMessage: false);
                         Console.WriteLine(modiinWeather.GetMessage());
                         break;
                     case "instagram":
