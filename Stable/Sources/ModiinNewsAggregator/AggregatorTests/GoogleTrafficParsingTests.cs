@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.IO;
-using System.IO.Pipes;
 using HtmlAgilityPack;
 using ModiinNewsAggregator.Interfaces;
 using ModiinNewsAggregator.Producers;
