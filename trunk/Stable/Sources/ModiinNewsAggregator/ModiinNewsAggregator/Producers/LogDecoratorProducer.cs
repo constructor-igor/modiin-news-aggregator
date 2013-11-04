@@ -1,4 +1,5 @@
-﻿using ModiinNewsAggregator.Interfaces;
+﻿using System;
+using ModiinNewsAggregator.Interfaces;
 using NLog;
 
 namespace ModiinNewsAggregator.Producers
@@ -18,10 +19,18 @@ namespace ModiinNewsAggregator.Producers
         #region IProducer
         public IMessage GetMessage()
         {
-            IMessage actualContent = actualProducer.GetMessage();
-            if (!actualContent.Empty || includeEmptyMessage)
-                m_logger.Trace("GetMessage(): {0}", actualContent);
-            return actualContent;
+            try
+            {
+                IMessage actualContent = actualProducer.GetMessage();
+                if (!actualContent.Empty || includeEmptyMessage)
+                    m_logger.Trace("GetMessage(): {0}", actualContent);
+                return actualContent;
+            }
+            catch (Exception e)
+            {
+                m_logger.ErrorException(String.Format("producer {0} failed", actualProducer.GetType()), e);
+                throw;
+            }
         }
         #endregion
     }
