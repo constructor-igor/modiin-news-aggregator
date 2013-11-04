@@ -11,7 +11,7 @@ namespace AggregatorTests.Feasibility
         [Explicit]
         public void Test()
         {
-            int[] line1 = new int[] { 5, 10, 50, 34, 10, 25 };
+            int[] line1 = new int[] { 10, 15, 50, 34, 10, 25 };
             int[] line2 = new int[] { 15, 20, 60, 44, 20, 35 };
 
             var dataSet = new List<int[]> {line1, line2};

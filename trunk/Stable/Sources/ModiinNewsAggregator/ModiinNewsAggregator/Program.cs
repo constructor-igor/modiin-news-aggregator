@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using GoogleAPI.UrlShortener;
 using ModiinNewsAggregator.Executers;
 using ModiinNewsAggregator.Interfaces;
 using ModiinNewsAggregator.Producers;
@@ -63,6 +64,11 @@ namespace ModiinNewsAggregator
                     case "traffic":
                         IAggregatorExecuter trafficExecuter = new TrafficExecuter();
                         trafficExecuter.Start();
+                        break;
+                    case "short":
+                        UrlResource client = new UrlResource();
+                        var response = client.Insert(new ShortenRequest { LongUrl = "http://gshortener.codeplex.com" });
+                        Console.WriteLine(response.Id);
                         break;
                     default:
                         Console.WriteLine("unknown command: '{0}'", command);
