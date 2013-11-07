@@ -20,7 +20,7 @@ namespace ModiinNewsAggregator.Producers
             foreach (string otherAddress in listOtherAddresses)
             {
                 string uri = String.Format("https://www.google.com/maps?saddr={0}&daddr={1}", baseAddress+",Israel", otherAddress+",Israel");
-                var producer = new GoogleTrafficProducer(baseAddress, otherAddress, new UriStreamCreator(uri));
+                var producer = new UpDownProducer(new GoogleTrafficProducer(baseAddress, otherAddress, new UriStreamCreator(uri)));
                 listOfTrafficProducers.Add(producer);
             }
         }

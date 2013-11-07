@@ -54,12 +54,13 @@ namespace ModiinNewsAggregator.Producers
         #endregion
     }
 
-    public class GoogleTrafficMessage : IMessage
+    public class GoogleTrafficMessage : IMessage, IValueMessage
     {
         public string SourceAddress { get; private set; }
         public string DestinationAddress { get; private set; }
         public string DirectionCaption { get; private set; }
         public IList<GoogleTrafficRoute> SuggestedTraffic { get; private set; }
+        private double m_minimalTraffic = Double.NaN;
 
         public GoogleTrafficMessage(string sourceAddress, string destinationAddress)
         {
@@ -85,6 +86,12 @@ namespace ModiinNewsAggregator.Producers
 
             text.Remove(text.Length-2, 2);
             Text += text.ToString();
+
+            string minimalCurrentTraffic = SuggestedTraffic[0].InCurrentTraffic.Trim();
+            if (!Double.TryParse(minimalCurrentTraffic.Split(' ')[0], out m_minimalTraffic))
+            {
+                m_minimalTraffic = Double.NaN;
+            }
         }
         #region IMessage
         public bool Empty { get { return String.IsNullOrEmpty(Text); } }
@@ -94,6 +101,11 @@ namespace ModiinNewsAggregator.Producers
         public override string ToString()
         {
             return Text;
+        }
+
+        public double Value
+        {
+            get { return m_minimalTraffic; }
         }
     }
 
