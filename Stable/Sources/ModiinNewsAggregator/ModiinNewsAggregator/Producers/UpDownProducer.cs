@@ -18,18 +18,19 @@ namespace ModiinNewsAggregator.Producers
             IMessage actualMessage = actualProducer.GetMessage();
             var valueMessage = actualMessage as IValueMessage;
             if (valueMessage == null)
-                return actualMessage;            
-            if (double.IsNaN(valueMessage.Value))
+                return actualMessage;
+            double actualMessageValue = valueMessage.Value;
+            if (double.IsNaN(actualMessageValue))
                 return actualMessage;
             if (double.IsNaN(lastValue))
             {
-                lastValue = valueMessage.Value;
+                lastValue = actualMessageValue;
             }
-            if (Math.Abs(lastValue - valueMessage.Value) < VALUE_TOLERANCE)
+            if (Math.Abs(lastValue - actualMessageValue) < VALUE_TOLERANCE)
                 return actualMessage;
 
             IMessage updatedMessage = actualMessage;
-            double newValue = valueMessage.Value;
+            double newValue = actualMessageValue;
             try
             {             
                 if (lastValue < newValue)
