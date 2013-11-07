@@ -3,6 +3,7 @@ using ModiinNewsAggregator.Interfaces;
 
 namespace ModiinNewsAggregator.Producers
 {
+    public enum UpDownStatus { Undefined, Up,  Down}
     // → ← ↑ ↓
     public class UpDownProducer : IProducer
     {
@@ -14,7 +15,7 @@ namespace ModiinNewsAggregator.Producers
             this.actualProducer = actualProducer;
         }
         public IMessage GetMessage()
-        {
+        {            
             IMessage actualMessage = actualProducer.GetMessage();
             var valueMessage = actualMessage as IValueMessage;
             if (valueMessage == null)
@@ -32,17 +33,48 @@ namespace ModiinNewsAggregator.Producers
             IMessage updatedMessage = actualMessage;
             double newValue = actualMessageValue;
             try
-            {             
+            {
                 if (lastValue < newValue)
-                    updatedMessage = new MessageContainer("↑ " + actualMessage.Text); 
+                {
+                    updatedMessage = new UpDownMessage(actualMessage, UpDownStatus.Up);
+                }
                 if (lastValue > newValue)
-                    updatedMessage = new MessageContainer("↓ " + actualMessage.Text); 
+                {
+                    updatedMessage = new UpDownMessage(actualMessage, UpDownStatus.Down);
+                }
             }
             finally
             {
                 lastValue = newValue;
             }
             return updatedMessage;
+        }
+    }
+
+    public class UpDownMessage : IMessage
+    {
+        private readonly UpDownStatus m_status;
+        public bool Empty { get { return String.IsNullOrEmpty(Text); }}
+        public string Text { get { return String.Format("{0} {1}", StatusTo(), ActualMessage.Text); } }
+        public IMessage ActualMessage { get; private set; }
+
+        public UpDownMessage(IMessage actualMessage, UpDownStatus status)
+        {
+            ActualMessage = actualMessage;
+            m_status = status;
+        }
+
+        public string StatusTo()
+        {
+            switch (m_status)
+            {
+                case UpDownStatus.Down:
+                    return "↓";
+                case UpDownStatus.Up:
+                    return "↑";
+                default:
+                    return "";
+            }
         }
     }
 }

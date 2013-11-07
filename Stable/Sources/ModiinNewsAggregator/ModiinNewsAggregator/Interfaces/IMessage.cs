@@ -4,6 +4,7 @@
     {
         bool Empty { get; }
         string Text { get; }
+        IMessage ActualMessage { get; }
     }
 
     public interface IValueMessage
