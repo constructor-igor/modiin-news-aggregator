@@ -91,6 +91,7 @@ namespace ModiinNewsAggregator.Producers
         {
             return Text;
         }
+        public IMessage ActualMessage { get { return this; } }
     }
 
     public class InstagramMedia

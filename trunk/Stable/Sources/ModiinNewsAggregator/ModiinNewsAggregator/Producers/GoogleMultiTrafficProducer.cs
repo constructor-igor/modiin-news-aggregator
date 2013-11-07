@@ -27,18 +27,18 @@ namespace ModiinNewsAggregator.Producers
         #region IProducer
         public IMessage GetMessage()
         {
-            List<GoogleTrafficMessage> messages = listOfTrafficProducers.Select(producer => producer.GetMessage() as GoogleTrafficMessage).ToList();
+            List<IMessage> messages = listOfTrafficProducers.Select(producer => producer.GetMessage()).ToList();
             return new GoogleMultiTrafficMessage(baseAddress, messages);
         }
-
         #endregion
     }
 
     public class GoogleMultiTrafficMessage : IMessage
     {
         private readonly String baseAddress;
-        private readonly List<GoogleTrafficMessage> messages;
-        public GoogleMultiTrafficMessage(String baseAddress, List<GoogleTrafficMessage> messages)
+       // private readonly List<GoogleTrafficMessage> messages;
+        private readonly List<IMessage> messages;
+        public GoogleMultiTrafficMessage(String baseAddress, List<IMessage> messages)
         {
             this.baseAddress = baseAddress;
             this.messages = messages;
@@ -49,9 +49,15 @@ namespace ModiinNewsAggregator.Producers
         {
             var text = new StringBuilder();
             text.AppendFormat("#{0} To ", baseAddress);
-            foreach (GoogleTrafficMessage message in messages)
+            foreach (IMessage message in messages)
             {
-                text.AppendFormat("{0} ({1}), ", message.DestinationAddress, message.SuggestedTraffic[0].InCurrentTraffic.Trim());
+                var actualMessage = message.ActualMessage as GoogleTrafficMessage;
+                if (actualMessage != null)
+                {
+                    var upDownMessage = message as UpDownMessage;
+                    string status = upDownMessage != null ? upDownMessage.StatusTo() : "";
+                    text.AppendFormat("{0} {1}({2}), ", actualMessage.DestinationAddress, status, actualMessage.SuggestedTraffic[0].InCurrentTraffic.Trim());
+                }
             }
             text.Remove(text.Length - 2, 2);
             return text.ToString();
@@ -60,6 +66,7 @@ namespace ModiinNewsAggregator.Producers
         #region IMessage
         public bool Empty { get { return String.IsNullOrEmpty(Text); } }
         public string Text { get; private set; }
+        public IMessage ActualMessage { get { return this; } }
         #endregion
 
         public override string ToString()

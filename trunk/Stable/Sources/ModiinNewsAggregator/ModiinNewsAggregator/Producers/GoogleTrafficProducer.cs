@@ -96,6 +96,7 @@ namespace ModiinNewsAggregator.Producers
         #region IMessage
         public bool Empty { get { return String.IsNullOrEmpty(Text); } }
         public string Text { get; private set; }
+        public IMessage ActualMessage { get { return this; } }
         #endregion
 
         public override string ToString()

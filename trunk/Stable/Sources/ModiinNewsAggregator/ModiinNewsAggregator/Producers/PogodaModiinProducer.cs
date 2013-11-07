@@ -46,6 +46,7 @@ namespace ModiinNewsAggregator.Producers
     {
         public bool Empty { get { return String.IsNullOrEmpty(Text); }}
         public string Text { get; private set; }
+        public IMessage ActualMessage { get { return this; } }
         public double Value { get { return Temperature; } }
 
         public double Temperature { get; private set; }
@@ -64,7 +65,7 @@ namespace ModiinNewsAggregator.Producers
         public override string ToString()
         {
             return Text;
-        }        
+        }
     }
     
 }
