@@ -1,0 +1,1 @@
+Implementation of agent (bot), which scans data (related to city Modiin) and posts to twitter https://twitter.com/modiin_ru
